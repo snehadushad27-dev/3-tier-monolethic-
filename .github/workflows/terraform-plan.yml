@@ -44,27 +44,23 @@ jobs:
       - name: Terraform Version
         run: terraform version
 
-      # 6. Terraform Init
+        # 6. Terraform Init
       - name: Terraform Init
+        working-directory: ./production
         run: terraform init
 
       # 7. Terraform Validate
       - name: Terraform Validate
+        working-directory: ./production
         run: terraform validate
 
       # 8. Terraform Plan
       - name: Terraform Plan
+        working-directory: ./production
         run: terraform plan
 
-      # 9. Infracost
-      - name: Setup Infracost
-        uses: infracost/actions/setup@v3
-
-      # - name: Infracost Cost Estimate
-      #   run: infracost breakdown --path . --format table
-      #   env:
-      #     INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
-
-      # 10. Terraform Apply
+      # 9. Terraform Apply
       - name: Terraform Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/cat'
+        working-directory: ./production
         run: terraform apply -auto-approve
