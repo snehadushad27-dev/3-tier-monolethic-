@@ -3,11 +3,11 @@ name: Terraform Practice
 on:
   push:
     branches:
-      - fan
+      - cat
 
 jobs:
   terraform-plan:
-    name: Terraform Plan - fan
+    name: Terraform Plan - cat
     runs-on: ubuntu-latest
 
     env:
@@ -60,10 +60,10 @@ jobs:
       - name: Setup Infracost
         uses: infracost/actions/setup@v3
 
-      - name: Infracost Cost Estimate
-        run: infracost breakdown --path . --format table
-        env:
-          INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+      # - name: Infracost Cost Estimate
+      #   run: infracost breakdown --path . --format table
+      #   env:
+      #     INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
 
       # 10. Terraform Apply
       - name: Terraform Apply
