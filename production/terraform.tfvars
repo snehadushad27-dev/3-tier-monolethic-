@@ -62,7 +62,7 @@ nsgs = {
     resource_group_name  = "producation"
     location             = "central india"
     virtual_network_name = "prod-vnet"
-    subnet_name        = "front-end"
+    subnet_name          = "front-end"
   }
 
   nsg2 = {
@@ -70,7 +70,7 @@ nsgs = {
     resource_group_name  = "development"
     location             = "westus"
     virtual_network_name = "dev-vnet"
-    subnet_name         = "back-end"
+    subnet_name          = "back-end"
   }
 }
 
@@ -106,7 +106,7 @@ vms = {
     offer               = "ubuntu-24_04-lts"
     sku                 = "server"
     nic_name            = "nic-prod"
-    os_type ="linux"
+    os_type             = "linux"
   }
   vm2 = {
     name                = "window-vm"
@@ -120,6 +120,6 @@ vms = {
     offer               = "WindowsServer"
     sku                 = "2016-Datacenter"
     nic_name            = "nic-dev"
-    os_type = "window"
+    os_type             = "window"
   }
 }

@@ -23,7 +23,7 @@ module "public_ip" {
 }
 
 module "security" {
-  depends_on = [module.resource,module.subnet]
+  depends_on = [module.resource, module.subnet]
   source     = "../module/azurerm_NSG"
   nsgs       = var.nsgs
 
