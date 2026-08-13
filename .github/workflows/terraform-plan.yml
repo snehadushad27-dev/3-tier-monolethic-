@@ -1,0 +1,66 @@
+name: Terraform Practice
+
+on:
+  push:
+    branches:
+      - cat
+
+jobs:
+  terraform-plan:
+    name: Terraform Plan - cat
+    runs-on: ubuntu-latest
+
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+    steps:
+
+      # 1. Checkout Code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Gitleaks
+      - name: Gitleaks Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 3. TFSec
+      - name: TFSec Security Scan
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          soft_fail: false
+
+      # 4. Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.15.6
+
+      # 5. Terraform Version
+      - name: Terraform Version
+        run: terraform version
+
+        # 6. Terraform Init
+      - name: Terraform Init
+        working-directory: ./production
+        run: terraform init
+
+      # 7. Terraform Validate
+      - name: Terraform Validate
+        working-directory: ./production
+        run: terraform validate
+
+      # 8. Terraform Plan
+      - name: Terraform Plan
+        working-directory: ./production
+        run: terraform plan
+
+      # 9. Terraform Apply
+      - name: Terraform Apply
+        if: github.event_name == 'push' && github.ref == 'refs/heads/cat'
+        working-directory: ./production
+        run: terraform apply -auto-approve

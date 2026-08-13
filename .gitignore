@@ -1,0 +1,45 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Terraform variable files - may contain secrets
+*.tfvars
+*.tfvars.json
+
+# Keep example variable file
+!terraform.tfvars.example
+
+# Azure credentials / secrets
+*.pem
+*.key
+*.pfx
+*.cer
+*.crt
+.env
+.env.*
+
+# Azure CLI
+.azure/
+
+# VS Code / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temporary / backup files
+*.tmp
+*.temp
+*.bak
+*~
