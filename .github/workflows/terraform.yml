@@ -11,30 +11,50 @@ on:
 
 jobs:
   terraform:
+    name: Terraform CI
     runs-on: ubuntu-latest
 
     steps:
 
+      # 1. Checkout code
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # 2. Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      # 3. Terraform version
       - name: Terraform Version
         run: terraform version
 
+      # 4. Terraform format
       - name: Terraform Format
         run: terraform fmt -check -recursive
 
+      # 5. Azure Login
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: |
+            {
+              "clientId": "${{ secrets.AZURE_CLIENT_ID }}",
+              "clientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
+              "subscriptionId": "${{ secrets.AZURE_SUBSCRIPTION_ID }}",
+              "tenantId": "${{ secrets.AZURE_TENANT_ID }}"
+            }
+
+      # 6. Terraform Init
       - name: Terraform Init
         run: terraform init
         working-directory: ./production
 
+      # 7. Terraform Validate
       - name: Terraform Validate
         run: terraform validate
         working-directory: ./production
 
+      # 8. Terraform Plan
       - name: Terraform Plan
         run: terraform plan
         working-directory: ./production

@@ -1,47 +1,36 @@
-resource "azurerm_virtual_machine" "vm" {
+resource "azurerm_linux_virtual_machine" "vm" {
   for_each            = var.vms
   name                = each.value.name
   resource_group_name = each.value.resource_group_name
   location            = each.value.location
-  vm_size             = each.value.vm_size
+  size                = "Standard_D2s_v3"
 
-  storage_os_disk {
-    name              = each.value.name
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
+  admin_username = each.value.admin_username
+  admin_password = each.value.admin_password
+
+  disable_password_authentication = "false"
+
+  network_interface_ids = [
+    data.azurerm_network_interface.nicd[each.key].id
+  ]
+
+
+
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
   }
 
-  os_profile {
-    computer_name  = each.value.computer_name
-    admin_username = each.value.admin_username
-    admin_password = each.value.admin_password
-  }
-
-  dynamic "os_profile_linux_config" {
-    for_each = each.value.os_type == "linux" ? [1] : []
-
-    content {
-      disable_password_authentication = false
-    }
-    dynamic "os_profile_windows_config" {
-      for_each = each.value.os_type == "windows" ? [1] : []
-
-      content {
-        provision_vm_agent = true
-      }
-    }
-
-
-  }
-  storage_image_reference {
-    publisher = each.value.publisher
-    offer     = each.value.offer
-    sku       = each.value.sku
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "ubuntu-24_04-lts"
+    sku       = "server"
     version   = "latest"
   }
-  network_interface_ids = [data.azurerm_network_interface.nicd[each.key].id]
 }
+
+
 
 data "azurerm_network_interface" "nicd" {
   for_each            = var.vms
