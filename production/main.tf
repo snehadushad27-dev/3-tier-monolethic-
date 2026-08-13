@@ -39,7 +39,7 @@ module "interface" {
 module "vm" {
   depends_on = [module.interface]
   source     = "../module/azurerm_VM"
-  vms        = var.vms
+  vms        = var.vmse
 
 }
 

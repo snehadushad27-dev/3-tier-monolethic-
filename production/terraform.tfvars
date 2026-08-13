@@ -93,7 +93,7 @@ nics = {
   }
 }
 
-vms = {
+vmse = {
   vm1 = {
     name                = "linux-vm"
     resource_group_name = "producation"
